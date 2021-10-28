@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { Remarkable } from "remarkable";
+import text from "./text";
+import "./App.css";
 
 function App() {
+  let md = new Remarkable();
+  const [value, setValue] = useState(text);
+
+  const handleChange = ({ target }) => {
+    setValue(target.value);
+  };
+
+  function getRawMarkup() {
+    return { __html: md.render(value) };
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+    <div className="app">
+      <div className="editor">
+        <p id="editor-title" className="fontt">
+          Editor
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <textarea id="editor" onChange={handleChange} value={value} />
+      </div>
+      <div className="preview">
+        <p id="preview-title" className="fontt">
+          Preview
+        </p>
+        <div id="preview" dangerouslySetInnerHTML={getRawMarkup()} />
+      </div>
+      {/* <h3>Input</h3>
+      <label htmlFor="markdown-content">Enter some markdown</label>
+      <textarea id="editor" onChange={handleChange} defaultValue={value} />
+      <h3>Output</h3>
+      <div className="content" dangerouslySetInnerHTML={getRawMarkup()} /> */}
     </div>
   );
 }
